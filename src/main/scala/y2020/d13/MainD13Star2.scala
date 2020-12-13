@@ -29,11 +29,19 @@ object MainD13Star2 extends App {
       else false
     }
 
+  def nextFactor(time: Long, index: Int, currentFactor: Long = 1): Option[Long] =
+    if (index >= count) None else {
+      val current = schedules(index)
+      val timeForCurrent = time + current.pos
+      if (timeForCurrent % current.id == 0) nextFactor(time, index + 1, currentFactor * current.id)
+      else Some(currentFactor)
+    }
+
   // println(isCorrect(1068781, 0))
-  // System.exit(0)
+  //System.exit(0)
 
   val max = schedules.maxBy(_.id)
-  var i: Long = 127775799999959L / max.id
+  var i: Long = 217118599999959L / max.id
 
   println(max)
 
