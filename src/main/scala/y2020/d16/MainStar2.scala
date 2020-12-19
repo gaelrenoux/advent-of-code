@@ -19,6 +19,8 @@ object MainStar2 extends App {
   println(fieldDefinitions.toList)
   val fieldCount = fieldDefinitions.size
 
+  val myTicket: Ticket = myTicketsTxt.split("\n").map(_.trim).filter(_.nonEmpty).tail.head.split(",").map(_.toInt)
+
   @inline private final def noRuleValidate(i: Int): Boolean = !fieldDefinitions.exists(_.isValid(i))
 
   val otherTickets: Array[Ticket] = otherTicketsTxt.split("\n").map(_.trim).filter(_.nonEmpty).tail.map(_.split(",").map(_.toInt))
@@ -49,8 +51,15 @@ object MainStar2 extends App {
     throw new Exception("ARGH")
   }
 
-  println(positionPerField)
-  val r = positionPerField.view.filterKeys(_.name.startsWith("departure")).values.product
-  println(r)
+
+
+  println(positionPerField.toList.map { case (k, v) => k.name -> v }.sortBy(_._2).mkString("\n", "\n", "\n"))
+  println(myTicket.toList)
+
+  val departureFields = positionPerField.view.filterKeys(_.name.startsWith("departure")).values.toList.sorted
+  println(departureFields)
+  val myDepartureFields = departureFields.map(myTicket.apply)
+  println(myDepartureFields)
+  println(myDepartureFields.map(_.toLong).product)
 
 }
